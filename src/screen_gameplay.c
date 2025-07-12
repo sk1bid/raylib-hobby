@@ -39,6 +39,7 @@ void InitGameplayScreen(void)
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+    spacing = 0;
 
     player = (Vector2){(float)screenWidth / 2, 310};
     ballSpeed = 300.0f; // pixels per second
@@ -52,7 +53,7 @@ void InitGameplayScreen(void)
         buildings[i].height = (float)GetRandomValue(100, 800);
         buildings[i].x = -6000 + spacing;
         buildings[i].y = screenHeight - 130.0f - buildings[i].height;
-
+        
         spacing += (int)buildings[i].width;
 
         buildColors[i] = (Color){GetRandomValue(100, 240), GetRandomValue(100, 240), GetRandomValue(100, 240), 255}; // rgbA
@@ -78,11 +79,14 @@ void UpdateGameplayScreen(void)
     deltaTime = GetFrameTime();
 
     // Arrows controling
-    if (IsKeyDown(KEY_RIGHT))
+    if (IsKeyDown(KEY_D))
         player.x += deltaTime * ballSpeed;
-    if (IsKeyDown(KEY_LEFT))
+    if (IsKeyDown(KEY_A))
         player.x -= deltaTime * ballSpeed;
 
+    if (IsKeyPressed(KEY_ENTER)){
+        finishScreen = 1;
+    }
     camera.target = (Vector2){player.x, player.y};
 
     camera.zoom = expf(logf(camera.zoom) + ((float)GetMouseWheelMove() * 0.1f)); // for smooth scaling
