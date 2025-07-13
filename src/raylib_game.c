@@ -28,6 +28,7 @@ GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
+Texture2D pixelButtonsTexture = {0};
 
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
@@ -41,7 +42,6 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
-
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -71,6 +71,8 @@ int main(void)
     font = LoadFont("mecha.png");
     //music = LoadMusicStream("resources/ambient.ogg"); // TODO: Load music
     fxCoin = LoadSound("coin.wav");
+
+    pixelButtonsTexture = LoadTexture("pixelButtonsTexture.png");
 
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
@@ -109,6 +111,7 @@ int main(void)
     UnloadFont(font);
     UnloadMusicStream(music);
     UnloadSound(fxCoin);
+    UnloadTexture(pixelButtonsTexture);
 
     CloseAudioDevice();     // Close audio context
 
