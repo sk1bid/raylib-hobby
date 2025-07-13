@@ -196,7 +196,7 @@ void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(LIME, 0.5));
-    DrawTextCentered("DOODLE", 70, 200, BLACK);
+    DrawTextCentered("DOODLER", 70, 200, BLACK);
     DrawTexturePro(
         pixelButtonsTexture, 
         startBtnSourceRec, 
