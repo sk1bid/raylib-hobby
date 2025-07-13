@@ -38,6 +38,7 @@ extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
 extern Sound fxCoin;
+extern Texture2D pixelButtonsTexture;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
