@@ -30,6 +30,7 @@ Music music = { 0 };
 Sound fxCoin = { 0 };
 Texture2D pixelButtonsTexture = {0};
 
+
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
 //----------------------------------------------------------------------------------
@@ -42,6 +43,8 @@ static bool onTransition = false;
 static bool transFadeOut = false;
 static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
+
+static bool exitWindow;
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -63,6 +66,8 @@ int main(void)
     // Initialization
     //---------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib game template");
+
+    SetExitKey(KEY_NULL);
 
     InitAudioDevice();      // Initialize audio device
 
@@ -88,7 +93,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
 
     // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
+    while (!WindowShouldClose() && !exitWindow)    // Detect window close button or ESC key
     {
         UpdateDrawFrame();
     }
@@ -245,9 +250,14 @@ static void UpdateDrawFrame(void)
             case TITLE:
             {
                 UpdateTitleScreen();
+                int finishState = FinishTitleScreen();
 
-                if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
-                else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
+                if (finishState == 1) {
+                    exitWindow = true;
+                }
+                else if (finishState == 2) {
+                    TransitionToScreen(GAMEPLAY);
+                }
 
             } break;
             case OPTIONS:
