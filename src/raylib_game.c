@@ -73,7 +73,7 @@ int main(void)
     fxCoin = LoadSound("coin.wav");
 
     pixelButtonsTexture = LoadTexture("pixelButtonsTexture.png");
-
+    SetTextureFilter(pixelButtonsTexture, TEXTURE_FILTER_POINT);
     SetMusicVolume(music, 1.0f);
     PlayMusicStream(music);
 
