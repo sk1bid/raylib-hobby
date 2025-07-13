@@ -76,7 +76,7 @@ void InitTitleScreen(void)
 
     exitButtonPosY = 4.0f * frameHeight; // go to the 5 row in sprite
     exitBtnSourceRec = (Rectangle){64 * 4, exitButtonPosY + 15, frameWidth, frameHeight - 40}; // start point for our Frame
-    exitBtnBounds = (Rectangle){ GetScreenWidth() / 2.0f - frameWidth, GetScreenHeight() / 2.0f + frameHeight, frameWidth * 2, (frameHeight / 2.5f) * 2};
+    exitBtnBounds = (Rectangle){ GetScreenWidth() / 2.0f - frameWidth, GetScreenHeight() / 2.0f + frameHeight / 2.0f, frameWidth * 2, (frameHeight / 2.5f) * 2};
 
     for (int i = 0; i < MAX_BUTTONS; i++){
         buttons[i].action = false;
@@ -107,8 +107,8 @@ void UpdateTitleScreen(void)
             buttons[0].action = true;
             buttons[0].state = 2;
         }
-        else if (currentBtn == 1){
-           finishScreen = 1; // close game
+        else if (currentBtn == 1){ //close game
+            finishScreen = 1;
            buttons[0].action = true;
            buttons[0].state = 2;
         }
@@ -142,7 +142,7 @@ void UpdateTitleScreen(void)
         }
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
             buttons[1].action = true;
-            finishScreen = 2;
+            finishScreen = 1;
         }
         TraceLog(LOG_INFO, "MOUSE: %d", currentBtn); 
     }
