@@ -62,6 +62,7 @@ static int currentBtn = 0; // number of button
 // Title Screen Initialization logic
 void InitTitleScreen(void)
 {
+    SetTargetFPS(60);
     ShowCursor();
     spriteScale = 2.0f;
     frameHeight = 64.0f;
@@ -86,13 +87,15 @@ void InitTitleScreen(void)
 
     mousePoint = (Vector2){0.0f, 0.0f};
 
-    currentBtn = -1;
+    currentBtn = 0;
+    buttons[0].state = 1;
 }
 
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
     mousePoint = GetMousePosition();
+    
     for (int i = 0; i < MAX_BUTTONS; i++)
     {
         buttons[i].action = false;
@@ -117,6 +120,9 @@ void UpdateTitleScreen(void)
     if (CheckCollisionPointRec(mousePoint, startBtnBounds))
     {
         currentBtn = -1;
+        for (int i = 0; i < MAX_BUTTONS; i++){
+            buttons[i].state = 0;
+        }
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             buttons[0].state = 2;
@@ -134,6 +140,9 @@ void UpdateTitleScreen(void)
     else if (CheckCollisionPointRec(mousePoint, exitBtnBounds))
     {
         currentBtn = -1;
+        for (int i = 0; i < MAX_BUTTONS; i++){
+            buttons[i].state = 0;
+        }
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             buttons[1].state = 2;
@@ -181,6 +190,8 @@ void UpdateTitleScreen(void)
         {
             buttons[i].state = 0;
         }
+        buttons[0].state = 1;
+        currentBtn = 0;
     }
 
     for (int i = 0; i < MAX_BUTTONS; i++)
@@ -218,8 +229,8 @@ void DrawTitleScreen(void)
         (Vector2){0, 0},
         0.0f,
         WHITE);
-    DrawRectangleLinesEx(startBtnBounds, 2, RED);
-    DrawRectangleLinesEx(exitBtnBounds, 2, RED);
+    //DrawRectangleLinesEx(startBtnBounds, 2, RED);
+    //DrawRectangleLinesEx(exitBtnBounds, 2, RED);
 }
 
 // Title Screen Unload logic
