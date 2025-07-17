@@ -39,6 +39,7 @@ static int finishScreen = 0;
 // Options Screen Initialization logic
 void InitOptionsScreen(void)
 {
+    SetTargetFPS(60);
     // TODO: Initialize OPTIONS screen variables here!
     framesCounter = 0;
     finishScreen = 0;
