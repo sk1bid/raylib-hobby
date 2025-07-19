@@ -5,7 +5,7 @@
 
 
 typedef struct Player {
-    Vector2 position;  
+    Rectangle collaider;
     float speed;      
 } Player;
 
