@@ -45,6 +45,7 @@ extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
 extern Sound fxCoin;
+extern Sound fxJump;
 extern Texture2D pixelButtonsTexture;
 
 #ifdef __cplusplus
