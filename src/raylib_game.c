@@ -28,6 +28,7 @@ GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
+Sound fxJump = {0};
 Texture2D pixelButtonsTexture = {0};
 
 
@@ -77,6 +78,8 @@ int main(void)
     font = LoadFont("mecha.png");
     //music = LoadMusicStream("resources/ambient.ogg"); // TODO: Load music
     fxCoin = LoadSound("coin.wav");
+
+    fxJump = LoadSound("Jump_16.wav");
 
     pixelButtonsTexture = LoadTexture("pixelButtonsTexture.png");
     SetTextureFilter(pixelButtonsTexture, TEXTURE_FILTER_POINT);
