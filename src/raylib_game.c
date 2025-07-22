@@ -31,6 +31,9 @@ Sound fxCoin = { 0 };
 Sound fxJump = {0};
 Texture2D pixelButtonsTexture = {0};
 
+int highestScore = 0;
+
+Vector3 diePos = {0};
 
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
@@ -52,7 +55,7 @@ static bool exitWindow;
 //----------------------------------------------------------------------------------
 static void ChangeToScreen(int screen);     // Change to screen, no transition effect
 
-static void TransitionToScreen(int screen); // Request transition to next screen
+static void TransitionToScreen(int screen, bool useTransition); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
 
@@ -112,7 +115,7 @@ int main(void)
         case TITLE: UnloadTitleScreen(); break;
         case OPTIONS: UnloadOptionsScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
-        case ENDING: UnloadEndingScreen(); break;
+
         default: break;
     }
 
@@ -143,7 +146,7 @@ static void ChangeToScreen(int screen)
         case TITLE: UnloadTitleScreen(); break;
         case OPTIONS: UnloadOptionsScreen(); break;
         case GAMEPLAY: UnloadGameplayScreen(); break;
-        case ENDING: UnloadEndingScreen(); break;
+
         default: break;
     }
 
@@ -154,7 +157,6 @@ static void ChangeToScreen(int screen)
         case TITLE: InitTitleScreen(); break;
         case OPTIONS: InitOptionsScreen(); break;
         case GAMEPLAY: InitGameplayScreen(); break;
-        case ENDING: InitEndingScreen(); break;
         default: break;
     }
 
@@ -162,13 +164,20 @@ static void ChangeToScreen(int screen)
 }
 
 // Request transition to next screen
-static void TransitionToScreen(int screen)
+static void TransitionToScreen(int screen, bool useTransition)
 {
-    onTransition = true;
-    transFadeOut = false;
-    transFromScreen = currentScreen;
-    transToScreen = screen;
-    transAlpha = 0.0f;
+    if (useTransition)
+    {
+        onTransition = true;
+        transFadeOut = false;
+        transFromScreen = currentScreen;
+        transToScreen = screen;
+        transAlpha = 0.0f;
+    }
+    else
+    {
+        ChangeToScreen(screen); 
+    }
 }
 
 // Update transition effect (fade-in, fade-out)
@@ -191,7 +200,7 @@ static void UpdateTransition(void)
                 case TITLE: UnloadTitleScreen(); break;
                 case OPTIONS: UnloadOptionsScreen(); break;
                 case GAMEPLAY: UnloadGameplayScreen(); break;
-                case ENDING: UnloadEndingScreen(); break;
+
                 default: break;
             }
 
@@ -202,7 +211,7 @@ static void UpdateTransition(void)
                 case TITLE: InitTitleScreen(); break;
                 case OPTIONS: InitOptionsScreen(); break;
                 case GAMEPLAY: InitGameplayScreen(); break;
-                case ENDING: InitEndingScreen(); break;
+
                 default: break;
             }
 
@@ -248,7 +257,7 @@ static void UpdateDrawFrame(void)
             {
                 UpdateLogoScreen();
 
-                if (FinishLogoScreen()) TransitionToScreen(TITLE);
+                if (FinishLogoScreen()) TransitionToScreen(TITLE, true);
 
             } break;
             case TITLE:
@@ -260,7 +269,7 @@ static void UpdateDrawFrame(void)
                     exitWindow = true;
                 }
                 else if (finishState == 2) {
-                    TransitionToScreen(GAMEPLAY);
+                    TransitionToScreen(GAMEPLAY, true);
                 }
 
             } break;
@@ -268,24 +277,18 @@ static void UpdateDrawFrame(void)
             {
                 UpdateOptionsScreen();
 
-                if (FinishOptionsScreen()) TransitionToScreen(TITLE);
+                if (FinishOptionsScreen()) TransitionToScreen(TITLE, true);
 
             } break;
             case GAMEPLAY:
             {
                 UpdateGameplayScreen();
 
-                if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+                if (FinishGameplayScreen() == 1) TransitionToScreen(TITLE, false);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
             } break;
-            case ENDING:
-            {
-                UpdateEndingScreen();
 
-                if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
-
-            } break;
             default: break;
         }
     }
@@ -304,7 +307,6 @@ static void UpdateDrawFrame(void)
             case TITLE: DrawTitleScreen(); break;
             case OPTIONS: DrawOptionsScreen(); break;
             case GAMEPLAY: DrawGameplayScreen(); break;
-            case ENDING: DrawEndingScreen(); break;
             default: break;
         }
 
