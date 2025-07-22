@@ -27,6 +27,7 @@
 #include "raylib.h"
 #include "screens.h"
 #include "my_utils.h"
+#include "gameplay.h"
 
 #define NUM_FRAMES 4
 #define MAX_BUTTONS 2
@@ -55,6 +56,12 @@ static Vector2 mousePoint = {0};
 
 static int currentBtn = 0; // number of button
 
+static Player titlePlayer = {0};
+static float deltaTime = 0.0f;
+static EnvItem platform = {0};
+
+void UpdateTitlePlayer(Player *player, EnvItem *platform, float delta);
+
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -62,6 +69,21 @@ static int currentBtn = 0; // number of button
 // Title Screen Initialization logic
 void InitTitleScreen(void)
 {
+    platform.blocking = 1;
+    platform.color = BROWN;
+    platform.rect = (Rectangle){0, GetScreenHeight() - 30, GetScreenWidth(), GetScreenHeight() + 30};
+
+    if (diePos.x == 0 && diePos.y == 0 && diePos.z == 0)
+    {
+        titlePlayer.collaider = (Rectangle){(float)GetScreenWidth() / 2.0f - 20, -600, 40, 40};
+        titlePlayer.speed = PLAYER_JUMP_SPEED;
+    }
+    else
+    {
+        titlePlayer.collaider = (Rectangle){diePos.x, -600, 40, 40};
+        titlePlayer.speed = diePos.z;
+    }
+
     SetTargetFPS(60);
     ShowCursor();
     spriteScale = 2.0f;
@@ -94,8 +116,11 @@ void InitTitleScreen(void)
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
+    deltaTime = GetFrameTime();
+
+    UpdateTitlePlayer(&titlePlayer, &platform, deltaTime);
     mousePoint = GetMousePosition();
-    
+
     for (int i = 0; i < MAX_BUTTONS; i++)
     {
         buttons[i].action = false;
@@ -120,9 +145,11 @@ void UpdateTitleScreen(void)
     if (CheckCollisionPointRec(mousePoint, startBtnBounds))
     {
         currentBtn = -1;
-        for (int i = 0; i < MAX_BUTTONS; i++){
+        for (int i = 0; i < MAX_BUTTONS; i++)
+        {
             buttons[i].state = 0;
         }
+
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             buttons[0].state = 2;
@@ -136,13 +163,20 @@ void UpdateTitleScreen(void)
             buttons[0].action = true;
             finishScreen = 2;
         }
+        if (IsKeyDown(KEY_ENTER))
+        {
+            buttons[0].action = true;
+            finishScreen = 2;
+        }
     }
     else if (CheckCollisionPointRec(mousePoint, exitBtnBounds))
     {
         currentBtn = -1;
-        for (int i = 0; i < MAX_BUTTONS; i++){
+        for (int i = 0; i < MAX_BUTTONS; i++)
+        {
             buttons[i].state = 0;
         }
+
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             buttons[1].state = 2;
@@ -152,6 +186,11 @@ void UpdateTitleScreen(void)
             buttons[1].state = 1;
         }
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+        {
+            buttons[1].action = true;
+            finishScreen = 1;
+        }
+        if (IsKeyDown(KEY_ENTER))
         {
             buttons[1].action = true;
             finishScreen = 1;
@@ -213,8 +252,9 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(LIME, 0.5));
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), LIGHTGRAY);
     DrawTextCentered("DOODLER", 70, 200, BLACK);
+    DrawText(TextFormat("Highest score: %d", highestScore), 300, 100, 15, BLACK);
     DrawTexturePro(
         pixelButtonsTexture,
         startBtnSourceRec,
@@ -229,8 +269,8 @@ void DrawTitleScreen(void)
         (Vector2){0, 0},
         0.0f,
         WHITE);
-    //DrawRectangleLinesEx(startBtnBounds, 2, RED);
-    //DrawRectangleLinesEx(exitBtnBounds, 2, RED);
+    DrawRectangleRec(platform.rect, platform.color);
+    DrawRectangleRec(titlePlayer.collaider, RED);
 }
 
 // Title Screen Unload logic
@@ -243,4 +283,51 @@ void UnloadTitleScreen(void)
 int FinishTitleScreen(void)
 {
     return finishScreen;
+}
+
+void UpdateTitlePlayer(Player *_titlePlayer, EnvItem *basePlatform, float delta)
+{
+    if (IsKeyDown(KEY_A))
+    {
+        _titlePlayer->collaider.x -= PLAYER_HOR_SPEED * delta;
+    }
+    if (IsKeyDown(KEY_D))
+    {
+        _titlePlayer->collaider.x += PLAYER_HOR_SPEED * delta;
+    }
+
+    if (_titlePlayer->collaider.x > GetScreenWidth())
+    {
+        _titlePlayer->collaider.x = -_titlePlayer->collaider.width;
+    }
+    else if (_titlePlayer->collaider.x < -_titlePlayer->collaider.width)
+    {
+        _titlePlayer->collaider.x = GetScreenWidth();
+    }
+
+    _titlePlayer->speed += G * delta; // gravitation,
+    float potential_new_y = _titlePlayer->collaider.y + _titlePlayer->speed * delta;
+    Rectangle playerFutureRect = {_titlePlayer->collaider.x,
+                                  potential_new_y,
+                                  _titlePlayer->collaider.width,
+                                  _titlePlayer->collaider.height};
+
+    bool hitPlatform = false;
+    float corrected_y = potential_new_y;
+
+    EnvItem *ei = basePlatform;
+    if (ei->blocking && _titlePlayer->speed >= 0 &&
+        CheckCollisionRecs(playerFutureRect, ei->rect) && (_titlePlayer->collaider.y + _titlePlayer->collaider.height) <= ei->rect.y)
+    {
+        hitPlatform = true;
+        _titlePlayer->speed = -PLAYER_JUMP_SPEED;
+        corrected_y = ei->rect.y - _titlePlayer->collaider.height;
+    }
+
+    _titlePlayer->collaider.y = corrected_y;
+
+    if (hitPlatform)
+    {
+        PlaySound(fxJump);
+    }
 }
