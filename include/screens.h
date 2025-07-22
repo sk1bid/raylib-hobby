@@ -47,6 +47,8 @@ extern Music music;
 extern Sound fxCoin;
 extern Sound fxJump;
 extern Texture2D pixelButtonsTexture;
+extern int highestScore;
+extern Vector3 diePos;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
@@ -88,14 +90,6 @@ void DrawGameplayScreen(void);
 void UnloadGameplayScreen(void);
 int FinishGameplayScreen(void);
 
-//----------------------------------------------------------------------------------
-// Ending Screen Functions Declaration
-//----------------------------------------------------------------------------------
-void InitEndingScreen(void);
-void UpdateEndingScreen(void);
-void DrawEndingScreen(void);
-void UnloadEndingScreen(void);
-int FinishEndingScreen(void);
 
 #ifdef __cplusplus
 }
