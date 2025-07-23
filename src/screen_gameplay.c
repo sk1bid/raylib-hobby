@@ -149,10 +149,11 @@ void UnloadGameplayScreen(void)
 // Gameplay Screen should finish?
 int FinishGameplayScreen(void)
 {
-    if (playerScore > highestScore){
-        highestScore = playerScore;
+    if (playerScore > gameData.highScore){
+        gameData.highScore = playerScore;
     }
     diePos = (Vector3){doodler.collaider.x, doodler.collaider.y, doodler.speed};
+    SaveGameData(FILENAME, &gameData);
     return finishScreen;
 }
 
