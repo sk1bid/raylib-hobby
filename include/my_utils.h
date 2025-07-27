@@ -15,4 +15,9 @@ double GetElapsed(Timer timer);
 
 // Draw your text in the center of the screen, you can choose y coordinate.
 void DrawTextCentered(const char* text, int fontSize, int posY, Color color);
+
+const char* GetSaveFilePath(void);
+
+bool TouchLeft(void);
+bool TouchRight(void);
 #endif // UTILS_H
