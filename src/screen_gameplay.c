@@ -27,7 +27,7 @@
 #include "screens.h"
 #include "gameplay.h"
 #include <stdlib.h>
-
+#include "my_utils.h"
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
@@ -53,6 +53,7 @@ Color playerColors[] = {
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
 //----------------------------------------------------------------------------------
+
 
 int  UpdatePlayer(Player *player, EnvItem *_envItems, float delta);
 
@@ -153,15 +154,15 @@ int FinishGameplayScreen(void)
         gameData.highScore = playerScore;
     }
     diePos = (Vector3){doodler.collaider.x, doodler.collaider.y, doodler.speed};
-    SaveGameData(FILENAME, &gameData);
+    SaveGameData(GetSaveFilePath(), &gameData);
     return finishScreen;
 }
 
 int UpdatePlayer(Player *player, EnvItem *_envItems, float delta){
-    if (IsKeyDown(KEY_A)){
+    if (IsKeyDown(KEY_A) || TouchLeft()){
         player->collaider.x -= PLAYER_HOR_SPEED * delta;
     }
-    if (IsKeyDown(KEY_D)){
+    if (IsKeyDown(KEY_D) || TouchRight()){
         player->collaider.x += PLAYER_HOR_SPEED * delta;
     }
     
@@ -209,7 +210,7 @@ int UpdatePlayer(Player *player, EnvItem *_envItems, float delta){
     globalBottomScreen =  GetScreenToWorld2D((Vector2){0, GetScreenHeight()}, camera);
     globalTopScreen =  GetScreenToWorld2D((Vector2){0, 0}, camera);
 
-    if (player->collaider.y  > globalBottomScreen.y + 120){
+    if (player->collaider.y  > globalBottomScreen.y && player->collaider.y < GetScreenHeight() - 100){
         return 1;
 
     }
