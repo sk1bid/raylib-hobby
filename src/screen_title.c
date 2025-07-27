@@ -254,7 +254,7 @@ void DrawTitleScreen(void)
     // TODO: Draw TITLE screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), LIGHTGRAY);
     DrawTextCentered("DOODLER", 70, 200, BLACK);
-    DrawText(TextFormat("Highest score: %d", gameData.highScore), 300, 100, 15, BLACK);
+    DrawText(TextFormat("Highest score: %d", gameData.highScore), 10, 100, 15, BLACK);
     DrawTexturePro(
         pixelButtonsTexture,
         startBtnSourceRec,
