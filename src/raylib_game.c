@@ -15,7 +15,8 @@
 #include "raylib.h"
 #include "screens.h"    // NOTE: Declares global (extern) variables and screens functions
 #include "resource_dir.h"
-
+#include "game_save_data.h"
+#include "my_utils.h"
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>
 #endif
@@ -31,9 +32,11 @@ Sound fxCoin = { 0 };
 Sound fxJump = {0};
 Texture2D pixelButtonsTexture = {0};
 
-int highestScore = 0;
 
 Vector3 diePos = {0};
+
+GameSaveData gameData = {0};
+
 
 //----------------------------------------------------------------------------------
 // Local Variables Definition (local to this module)
@@ -68,6 +71,8 @@ int main(void)
 {
     SetConfigFlags(FLAG_VSYNC_HINT);
     SetConfigFlags(FLAG_WINDOW_HIGHDPI);
+
+    LoadGameData(GetSaveFilePath(), &gameData);
     // Initialization
     //---------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "raylib game template");
@@ -124,6 +129,8 @@ int main(void)
     UnloadMusicStream(music);
     UnloadSound(fxCoin);
     UnloadTexture(pixelButtonsTexture);
+    UnloadSound(fxJump);
+    SaveGameData(GetSaveFilePath(), &gameData);
 
     CloseAudioDevice();     // Close audio context
 
