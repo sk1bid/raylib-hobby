@@ -26,6 +26,9 @@
 #ifndef SCREENS_H
 #define SCREENS_H
 
+#include "game_save_data.h"
+
+#define FILENAME "savegame.bin"
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
@@ -47,8 +50,10 @@ extern Music music;
 extern Sound fxCoin;
 extern Sound fxJump;
 extern Texture2D pixelButtonsTexture;
-extern int highestScore;
+
 extern Vector3 diePos;
+
+extern GameSaveData gameData;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
