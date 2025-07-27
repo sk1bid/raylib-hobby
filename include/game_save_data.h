@@ -5,8 +5,7 @@
 #include <stdbool.h>
 
 typedef struct GameSaveData {
-    int highScore;         
-    int totalCoins;       
+    int highScore;              
     bool characterUnlocked[5]; 
     float lastPlayTime;     
 } GameSaveData;
