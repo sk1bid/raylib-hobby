@@ -254,7 +254,7 @@ void DrawTitleScreen(void)
     // TODO: Draw TITLE screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), LIGHTGRAY);
     DrawTextCentered("DOODLER", 70, 200, BLACK);
-    DrawText(TextFormat("Highest score: %d", highestScore), 300, 100, 15, BLACK);
+    DrawText(TextFormat("Highest score: %d", gameData.highScore), 300, 100, 15, BLACK);
     DrawTexturePro(
         pixelButtonsTexture,
         startBtnSourceRec,
@@ -287,11 +287,11 @@ int FinishTitleScreen(void)
 
 void UpdateTitlePlayer(Player *_titlePlayer, EnvItem *basePlatform, float delta)
 {
-    if (IsKeyDown(KEY_A))
+    if (IsKeyDown(KEY_A) || TouchLeft())
     {
         _titlePlayer->collaider.x -= PLAYER_HOR_SPEED * delta;
     }
-    if (IsKeyDown(KEY_D))
+    if (IsKeyDown(KEY_D) || TouchRight())
     {
         _titlePlayer->collaider.x += PLAYER_HOR_SPEED * delta;
     }
