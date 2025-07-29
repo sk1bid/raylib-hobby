@@ -1,9 +1,8 @@
-
 /**********************************************************************************************
 *
 *   raylib - Advance Game template
 *
-*   Title Screen Functions Definitions (Init, Update, Draw, Unload)
+*   Options Screen Functions Definitions (Init, Update, Draw, Unload)
 *
 *   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
 *
@@ -34,48 +33,38 @@ static int framesCounter = 0;
 static int finishScreen = 0;
 
 //----------------------------------------------------------------------------------
-// Title Screen Functions Definition
+// Options Screen Functions Definition
 //----------------------------------------------------------------------------------
 
-// Title Screen Initialization logic
-void InitTitleScreen(void)
+// Options Screen Initialization logic
+void InitOptionsScreen(void)
 {
-    // TODO: Initialize TITLE screen variables here!
+    SetTargetFPS(60);
+    // TODO: Initialize OPTIONS screen variables here!
     framesCounter = 0;
     finishScreen = 0;
 }
 
-// Title Screen Update logic
-void UpdateTitleScreen(void)
+// Options Screen Update logic
+void UpdateOptionsScreen(void)
 {
-    // TODO: Update TITLE screen variables here!
-
-    // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER)){
-        finishScreen = 2;
-        PlaySound(fxCoin);
-    }
-    if (IsKeyPressed(KEY_O)){
-        finishScreen = 1;
-    }
+    // TODO: Update OPTIONS screen variables here!
 }
 
-// Title Screen Draw logic
-void DrawTitleScreen(void)
+// Options Screen Draw logic
+void DrawOptionsScreen(void)
 {
-    // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    DrawText("PRESS ENTER TO START GAME ('O' TO GO SETTINGS)", 120, 220, 20, DARKGREEN);
+    // TODO: Draw OPTIONS screen here!
 }
 
-// Title Screen Unload logic
-void UnloadTitleScreen(void)
+// Options Screen Unload logic
+void UnloadOptionsScreen(void)
 {
-    // TODO: Unload TITLE screen variables here!
+    // TODO: Unload OPTIONS screen variables here!
 }
 
-// Title Screen should finish?
-int FinishTitleScreen(void)
+// Options Screen should finish?
+int FinishOptionsScreen(void)
 {
     return finishScreen;
 }

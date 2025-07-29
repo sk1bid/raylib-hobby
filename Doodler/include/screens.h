@@ -26,10 +26,20 @@
 #ifndef SCREENS_H
 #define SCREENS_H
 
+#include "game_save_data.h"
+
+#define FILENAME "savegame.bin"
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
 typedef enum GameScreen { UNKNOWN = -1, LOGO = 0, TITLE, OPTIONS, GAMEPLAY, ENDING } GameScreen;
+
+typedef struct Button
+{
+    int state;
+    bool action;
+}Button;
+
 
 //----------------------------------------------------------------------------------
 // Global Variables Declaration (shared by several modules)
@@ -38,6 +48,12 @@ extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
 extern Sound fxCoin;
+extern Sound fxJump;
+extern Texture2D pixelButtonsTexture;
+
+extern Vector3 diePos;
+
+extern GameSaveData gameData;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
@@ -79,14 +95,6 @@ void DrawGameplayScreen(void);
 void UnloadGameplayScreen(void);
 int FinishGameplayScreen(void);
 
-//----------------------------------------------------------------------------------
-// Ending Screen Functions Declaration
-//----------------------------------------------------------------------------------
-void InitEndingScreen(void);
-void UpdateEndingScreen(void);
-void DrawEndingScreen(void);
-void UnloadEndingScreen(void);
-int FinishEndingScreen(void);
 
 #ifdef __cplusplus
 }
