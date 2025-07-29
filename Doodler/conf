@@ -1,0 +1,40 @@
+# 1.  HTTP-блок оставляем только для 301-перенаправления
+server {
+    listen       80;
+    server_name  sk1bid.ru;
+
+    return 301   https://$host$request_uri;
+}
+
+# 2.  Основной HTTPS-виртуальный хост
+server {
+    listen 443 ssl http2;
+    server_name sk1bid.ru;
+
+    root   /var/www/site-root;
+    index  index.html;
+
+    # --- пути к вашим файлам ---
+    ssl_certificate      /etc/nginx/ssl/sk1bid.ru/fullchain.pem;   # cert + chain
+    ssl_certificate_key  /etc/nginx/ssl/sk1bid.ru/certificate.key;   # private key
+
+    # --- рекомендуемые параметры TLS (Mozilla «Intermediate», июль-2025) ---
+    ssl_protocols              TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers  off;
+    ssl_session_timeout        1d;
+    ssl_session_cache          shared:SSL:10m;
+    ssl_session_tickets        off;
+
+    # OCSP Stapling (ускоряет проверку цепочки)
+    ssl_stapling       on;
+    ssl_stapling_verify on;
+    resolver 1.1.1.1 8.8.8.8 valid=300s;
+    resolver_timeout   5s;
+
+    # (необязательно) HSTS
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+
+    # --- ваши существующие настройки ---
+    gzip       on;
+    gzip_types application/wasm application/javascript;
+}
