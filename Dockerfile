@@ -9,7 +9,7 @@ COPY scripts/ ./scripts/
 COPY src/ ./src/
 COPY raylib/ ./raylib/
 
-ENV RAYLIB_WEB=/workspace/../raylib/src
+ENV RAYLIB_WEB=/workspace/raylib/src
 ENV OUTDIR_ROOT=/workspace/site-root
 
 WORKDIR /workspace/scripts
