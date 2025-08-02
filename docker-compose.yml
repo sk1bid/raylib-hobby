@@ -6,7 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        GAME: "Doodler"
+        - GAME: "Doodler"
+        - RAYLIB_VERSION=5.5
     ports:
       - "8080:80"
     restart: on-failure
