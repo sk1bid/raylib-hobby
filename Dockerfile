@@ -4,18 +4,15 @@ ARG GAME=Doodler
 
 WORKDIR /workspace
 
-COPY raylib/ ./raylib/
-RUN cd raylib/src \
- && emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=WEB \
- && cmake --build build --config Release \
- && cp raylib/src/build/libraylib.a libraylib.web.a
+COPY raylib/src ./raylib/src
+
 
 COPY scripts/ ./scripts/
 COPY src/ ./src/
 
-ENV RAYLIB_WEB=/workspace/libraylib.web.a  \
+ENV RAYLIB_WEB=/workspace/raylib/src \
     OUTDIR_ROOT=/workspace/site-root
-    
+
 WORKDIR /workspace/scripts
 
 RUN chmod +x build_web.sh && \
