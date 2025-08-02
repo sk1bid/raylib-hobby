@@ -19,3 +19,6 @@ RUN rm -rf /usr/share/nginx/html/*
 ARG GAME
 COPY --from=builder /workspace/site-root/"${GAME}}"/ /usr/share/nginx/html/
 
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
