@@ -1,6 +1,7 @@
 FROM emscripten/emsdk:4.0.12 AS builder
 
-# Set name of game folder to compile
+
+ARG RAYLIB_VERSION=4.6.0
 ARG GAME=Doodler
 
 WORKDIR /workspace
@@ -9,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       wget ca-certificates build-essential cmake ninja-build && \
     rm -rf /var/lib/apt/lists/*
 
-# make raylib web
+
 RUN wget -qO raylib.tar.gz \
       https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz && \
     mkdir raylib && \
@@ -26,12 +27,15 @@ RUN emcmake cmake -G Ninja \
     cmake --build build && \
     cp build/libraylib.a src/libraylib.web.a
 
+
 WORKDIR /workspace
 COPY scripts/ ./scripts/
 COPY src/     ./src/
 
+
 ENV RAYLIB_WEB=/workspace/raylib/src \
     OUTDIR_ROOT=/workspace/site-root
+
 
 WORKDIR /workspace/scripts
 RUN chmod +x build_web.sh && \
@@ -47,4 +51,4 @@ COPY --from=builder /workspace/site-root/"${GAME}"/ /usr/share/nginx/html/
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx","-g","daemon off;"]
