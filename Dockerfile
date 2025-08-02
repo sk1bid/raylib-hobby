@@ -10,7 +10,7 @@ RUN chmod +x build_web.sh
 COPY src/ ./src/
 COPY raylib/ ./raylib/
 
-RUN ./build_web.sh release "${GAME}"
+RUN ./build_web.sh "${GAME}"
 
 FROM nginx:stable-alpine
 
