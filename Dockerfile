@@ -25,7 +25,7 @@ RUN emcmake cmake -G Ninja \
       -DBUILD_TESTS=OFF \
       -DPLATFORM=Web && \
     cmake --build build && \
-    cp raylib/libraylib.a src/libraylib.web.a
+    cp build/raylib/libraylib.a  src/libraylib.web.a
 
 
 WORKDIR /workspace
