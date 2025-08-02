@@ -1,4 +1,4 @@
-version: "3.8"
+
 
 services:
   web:
@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - GAME: "Doodler"
-        - RAYLIB_VERSION=5.5
+        RAYLIB_VERSION: "5.5"
+        GAME: "Doodler"
     ports:
       - "8080:80"
     restart: on-failure
