@@ -4,8 +4,7 @@ ARG GAME=Doodler
 
 WORKDIR /workspace
 
-COPY scripts/build_web.sh ./build_web.sh
-RUN chmod +x build_web.sh
+COPY scripts/ ./scripts/
 
 COPY src/ ./src/
 COPY raylib/ ./raylib/
@@ -13,7 +12,10 @@ COPY raylib/ ./raylib/
 ENV RAYLIB_WEB=/workspace/../raylib/src
 ENV OUTDIR_ROOT=/workspace/site-root
 
-RUN ./build_web.sh "${GAME}"
+WORKDIR /workspace/scripts
+
+RUN chmod +x build_web.sh && \
+    ./build_web.sh "${GAME}"
 
 FROM nginx:stable-alpine
 
