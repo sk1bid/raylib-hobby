@@ -1,0 +1,101 @@
+<!-- index.html – адаптив v3 : на телефонах iframe ужимается ровно до «видимой» области -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>My Tiny Game Hub</title>
+
+<style>
+:root{--bg:#80a0ad;--fg:#272424;--accent:#cbe3e2;--card:#3b8766}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;line-height:1.55;background:var(--bg);color:var(--fg)}
+header{padding:4rem 1rem;text-align:center}
+header h1{font-size:clamp(2rem,4vw+1rem,4rem);margin-bottom:1rem}
+header p{max-width:55ch;margin-inline:auto;opacity:.85}
+section{padding:3rem 1rem;max-width:1000px;margin:auto}
+h2{color:var(--accent);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:.02em}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--card);padding:1rem;border-radius:8px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.card img{max-width:100%;border-radius:6px;margin-bottom:.5rem}
+.card a{color:var(--accent);text-decoration:none;font-weight:700;margin-top:auto}
+footer{text-align:center;padding:2.5rem 1rem;font-size:.875rem;opacity:.6}
+
+/* ── overlay ── */
+#overlay{display:none;position:fixed;inset:0;background:#000c;
+         align-items:center;justify-content:center;z-index:1000}
+#gameFrame{width:450px;height:800px;border:none;border-radius:8px;
+           box-shadow:0 0 30px #000;background:#000;display:block}
+#spinner{display:none;position:absolute;width:50px;height:50px;
+         border:5px solid rgba(255,255,255,.3);
+         border-top:5px solid var(--accent);border-radius:50%;
+         animation:spin 1s linear infinite;z-index:1001}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:600px){
+  header{padding:2.5rem 1rem}
+  .cards{grid-template-columns:1fr}
+  .card{padding:.8rem}
+  header h1{font-size:clamp(1.8rem,5vw+1rem,3rem)}
+}
+@media(orientation:landscape) and (max-height:500px){#rotateHint{display:flex}}
+#rotateHint{position:fixed;inset:0;z-index:2000;background:#000d;color:#fff;display:none;
+            align-items:center;justify-content:center;text-align:center;padding:2rem;font-size:1.2rem}
+</style>
+</head>
+
+<body>
+<header><h1>My Tiny Game Hub</h1><p>Practise DevOps in simple GameDev</p></header>
+
+<section><h2>Play Now</h2><div class="cards">
+  <div class="card">
+    <img src="covers/doodler.png" alt="Doodler cover">
+    <strong>Doodler</strong>
+    <a href="#" onclick="openGame('Doodler/index.html')">Play ▶</a>
+  </div>
+</div></section>
+
+<footer>© 2025 Ivanov Artem</footer>
+
+<div id="overlay"><div id="spinner"></div><iframe id="gameFrame"></iframe></div>
+<div id="rotateHint">Поверните устройство в портрет 🙂</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const ov  = document.getElementById('overlay'),
+        fr  = document.getElementById('gameFrame'),
+        sp  = document.getElementById('spinner');
+  const NAT_W=450,NAT_H=800, PADDING=16; // PADDING – зазор от краёв
+
+  function fit(){
+    /* viewport без address-bar */
+    const vw = window.innerWidth,
+          vh = window.innerHeight;
+    const k = Math.min((vw-PADDING)/NAT_W, (vh-PADDING)/NAT_H);
+
+    if(k>=1){                        // desktop/tablet – upscale
+      fr.style.transform=`scale(${k})`;
+      fr.style.width = NAT_W+'px';
+      fr.style.height= NAT_H+'px';
+    }else{                           // phone – shrink без transform-offset
+      fr.style.transform='none';
+      fr.style.width = NAT_W*k+'px';
+      fr.style.height= NAT_H*k+'px';
+    }
+  }
+
+  window.openGame = src=>{
+    sp.style.display='block';
+    fr.onload = ()=>{sp.style.display='none';fit();};
+    fr.src=src; ov.style.display='flex'; document.body.style.overflow='hidden'; fit();
+  };
+  window.closeGame = ()=>{ov.style.display='none';document.body.style.overflow='';fr.src='';};
+
+  addEventListener('resize',fit);
+  ov.addEventListener('click',e=>{if(e.target===ov) window.closeGame();});
+  addEventListener('keydown',e=>{if(e.key==='Escape') window.closeGame();});
+});
+</script>
+</body>
+</html>
