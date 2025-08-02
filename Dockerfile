@@ -6,23 +6,25 @@ ARG GAME=Doodler
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-      git build-essential wget ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-
-ENV CMAKE_VERSION=3.27.4
-RUN wget -qO /tmp/cmake.tar.gz \
-      https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz \
- && tar --strip-components=1 -xzvf /tmp/cmake.tar.gz -C /usr/local \
- && rm /tmp/cmake.tar.gz
+      wget ca-certificates build-essential cmake ninja-build && \
+    rm -rf /var/lib/apt/lists/*
 
 # make raylib web
-RUN git clone --depth 1 https://github.com/raysan5/raylib.git raylib
-WORKDIR /workspace/raylib
-RUN emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=Web \
- && cmake --build build --config Release \
- && cp build/libraylib.a src/libraylib.web.a
+RUN wget -qO raylib.tar.gz \
+      https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz && \
+    mkdir raylib && \
+    tar --strip-components=1 -xzf raylib.tar.gz -C raylib && \
+    rm raylib.tar.gz
 
+WORKDIR /workspace/raylib
+RUN emcmake cmake -G Ninja \
+      -B build -S . \
+      -DBUILD_SHARED_LIBS=OFF \
+      -DBUILD_EXAMPLES=OFF \
+      -DBUILD_TESTS=OFF \
+      -DPLATFORM=WEB && \
+    cmake --build build && \
+    cp build/libraylib.a src/libraylib.web.a
 
 WORKDIR /workspace
 COPY scripts/ ./scripts/
