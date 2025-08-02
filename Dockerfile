@@ -19,7 +19,7 @@ RUN wget -qO /tmp/cmake.tar.gz \
 # make raylib web
 RUN git clone --depth 1 https://github.com/raysan5/raylib.git raylib
 WORKDIR /workspace/raylib
-RUN emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=WEB \
+RUN emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=Web \
  && cmake --build build --config Release \
  && cp build/libraylib.a src/libraylib.web.a
 
