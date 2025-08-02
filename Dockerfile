@@ -8,7 +8,7 @@ COPY scripts/build_web.sh ./build_web.sh
 RUN chmod +x build_web.sh
 
 COPY src/ ./src/
-COPY raylib/ ./raylib/
+COPY ../raylib/ ./raylib/
 
 RUN ./build_web.sh release "${GAME}"
 
