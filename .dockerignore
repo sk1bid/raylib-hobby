@@ -1,0 +1,7 @@
+# Исключаем всё лишнее из контекста сборки
+.git
+.gitignore
+env/
+*.log
+site-root/
+resources/
