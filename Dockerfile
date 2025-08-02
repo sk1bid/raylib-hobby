@@ -1,6 +1,6 @@
 FROM --platform=arm64 emscripten/emsdk:4.0.12 AS builder
 
-ARG Game=Doodler
+ARG GAME=Doodler
 
 WORKDIR /workspace
 
