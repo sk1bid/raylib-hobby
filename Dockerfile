@@ -7,13 +7,13 @@ WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git cmake build-essential && \
-    git clone --depth 1 https://github.com/raysan5/raylib.git raylib
+      git clone --depth 1 https://github.com/raysan5/raylib.git raylib
 
 # make raylib web
-RUN cd raylib/src && \
-    emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=WEB && \
+WORKDIR /workspace/raylib
+RUN emcmake cmake -B build -S . -DBUILD_SHARED_LIBS=OFF -DPLATFORM=WEB && \
     cmake --build build --config Release && \
-    cp build/libraylib.a libraylib.web.a
+    cp build/libraylib.a src/libraylib.web.a
 
 
 COPY scripts/ ./scripts/
