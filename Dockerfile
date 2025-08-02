@@ -8,7 +8,7 @@ COPY scripts/build_web.sh ./build_web.sh
 RUN chmod +x build_web.sh
 
 COPY src/ ./src/
-COPY ../raylib/ ./raylib/
+COPY raylib/ ./raylib/
 
 RUN ./build_web.sh release "${GAME}"
 
@@ -21,4 +21,4 @@ COPY --from=builder /workspace/site-root/"${GAME}}"/ /usr/share/nginx/html/
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon"]
