@@ -23,7 +23,7 @@ RUN emcmake cmake -G Ninja \
       -DBUILD_SHARED_LIBS=OFF \
       -DBUILD_EXAMPLES=OFF \
       -DBUILD_TESTS=OFF \
-      -DPLATFORM=WEB && \
+      -DPLATFORM=Web && \
     cmake --build build && \
     cp build/libraylib.a src/libraylib.web.a
 
