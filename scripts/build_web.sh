@@ -19,7 +19,7 @@
 set -euo pipefail
 
 # --- paths -------------------------------------------------------------------
-RAYLIB_WEB="${RAYLIB_WEB:-../../raylib/src}"
+RAYLIB_WEB="${RAYLIB_WEB:-../raylib/src}"
 OUTDIR_ROOT="${OUTDIR_ROOT:-../site-root}"
 
 # --- parse CLI ---------------------------------------------------------------
